@@ -1,0 +1,11 @@
+op[1] = 1, htype[1] = 1, hlen[1] = 6, hops[1] = 0,
+xid[4] = 128,
+secs[2] = 0, flags[2] = 0,
+ciaddr[4] = 0,
+yiaddr[4] = 0,
+siaddr[4] = 0,
+giaddr[4] = 0,
+chaddr[16] = 0x112233445566,
+sname[64] = 0,
+file[128] = 0,
+options[1] = 0
