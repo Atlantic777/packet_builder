@@ -114,7 +114,7 @@ class FieldTests(TestCase):
         self.assertEqual(target, raw)
 
     def test_long_fields(self):
-        f = Field("foo[16] = 0x11111111 22222222 33333333 44444444")
+        f = Field("foo[16] = 0x11111111 22222222")
         raw = f.get_raw()
-        target = "\x11"*4 + "\x22"*4 + "\x33"*4 + "\x44"*4
+        target = "\x11"*4 + "\x22"*4 + "\00"*8
         self.assertEqual(target, raw)

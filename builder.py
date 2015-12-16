@@ -16,6 +16,7 @@ class Field:
     value = None
 
     def __init__(self, token):
+        token = token.replace(' ', '')
         size_start = token.find('[')
         size_end = token.find(']')
         default_start = token.find('=')
@@ -40,7 +41,10 @@ class Field:
             elif default[:2] == '0b':
                 base = 2
 
-            self.value = int(default, base)
+            try:
+                self.value = int(default, base)
+            except:
+                raise BadFormatException
 
     def __str__(self):
         s = "{name}[{size}] = "
@@ -59,7 +63,13 @@ class Field:
         return s.format(**d)
 
     def get_raw(self):
-        hs = "{:0" + str(self.size*2) + "x}"
+        hs = ''
+
+        if self.size > 4:
+            hs = "{:<0" + str(self.size*2) + "x}"
+        else:
+            hs = "{:0" + str(self.size*2) + "x}"
+
         hs = hs.format(self.value)
         b = [hs[i:i+2] for i in range(0, len(hs), 2)]
         i = [int(bi, 16) for bi in b]
@@ -73,7 +83,7 @@ class Builder:
     Pass this class a template,
     and it will create a builder for that packet type
     """
-    def __init__(self, template=None):
+    def __init__(self, template=''):
         self.__common_init()
         self.set_template(template)
 
@@ -83,7 +93,6 @@ class Builder:
         self.order = []
 
     def set_template(self, template):
-        template = template.replace(' ', '')
         self.template = template
         self.prepare()
 
@@ -92,7 +101,8 @@ class Builder:
             return
 
         self.__common_init()
-        self.tokens = self.template.split(',')
+        template = self.template.replace(' ', '')
+        self.tokens = template.split(',')
 
         line = 1
 
